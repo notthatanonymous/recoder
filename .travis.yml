@@ -15,11 +15,11 @@
 language: python
 jobs:
   include:
-    # - name: "Python 3.8 on Xenial linux"
-    #   python: 3.8
-    #   os: linux
-    #   dist: xenial
-    #   arch: amd64
+    - name: "Python 3.8 on Xenial linux"
+      python: 3.8
+      os: linux
+      dist: xenial
+      arch: amd64
     - name: "Python 3.6 on Xenial linux"
       python: 3.6
       os: linux
