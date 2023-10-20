@@ -32,6 +32,7 @@ def filter_triplets(tp, min_uc=5, min_sc=0):
     # After doing this, some of the items will have less than min_uc users, but should only be a small proportion
     if min_uc > 0:
         usercount = get_count(tp, 'userId')
+        print(usercount)
         tp = tp[tp['userId'].isin(usercount.index[usercount >= min_uc])]
     
     # Update both usercount and itemcount after filtering
