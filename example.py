@@ -21,6 +21,7 @@ def get_count(tp, id):
     return count
 
 def filter_triplets(tp, min_uc=5, min_sc=0):
+    print(tp)
     # Only keep the triplets for items which were clicked on by at least min_sc users. 
     if min_sc > 0:
         itemcount = get_count(tp, 'movieId')
