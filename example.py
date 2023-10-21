@@ -257,7 +257,7 @@ evaluator = RecommenderEvaluator(recommender, metrics)
 
 metrics_accumulated = evaluator.evaluate(val_tr_dataset, batch_size=500)
 
-for metric in metrics_accumulated:
-  print(f'{metric}: {np.mean(metrics_accumulated[metric])}')
+# for metric in metrics_accumulated:
+#   print(f'{metric}: {np.mean(metrics_accumulated[metric])}')
 
-print(f"{chr(92)}{chr(92)}{chr(92)}Score: {np.mean(metrics_accumulated[2]}{chr(92)}{chr(92)}{chr(92)}")
+print(f"Score: {np.mean(metrics_accumulated[2]}")
