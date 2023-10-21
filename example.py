@@ -174,7 +174,7 @@ train_dataset = RecommendationDataset(train_matrix)
 val_tr_dataset = RecommendationDataset(val_tr_matrix, val_te_matrix)
 
 
-use_cuda = True
+use_cuda = False
 
 model = DynamicAutoencoder(hidden_layers=[200], activation_type='tanh',
                            noise_prob=0.5, sparse=False)
