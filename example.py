@@ -21,7 +21,6 @@ def get_count(tp, id):
     return count
 
 def filter_triplets(tp, min_uc=5, min_sc=0):
-    print(tp)
     # Only keep the triplets for items which were clicked on by at least min_sc users. 
     if min_sc > 0:
         itemcount = get_count(tp, 'movieId')
@@ -67,6 +66,8 @@ show2id = dict((sid, i) for (i, sid) in enumerate(unique_sid))
 profile2id = dict((pid, i) for (i, pid) in enumerate(unique_uid))
 
 pro_dir = os.path.join(DATA_DIR, 'pro_sg')
+
+print(pro_dir)
 
 def split_train_test_proportion(data, test_prop=0.2):
     data_grouped_by_user = data.groupby('userId')
