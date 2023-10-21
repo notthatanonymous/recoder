@@ -3,6 +3,10 @@ import shutil
 import sys
 
 import numpy as np
+
+
+print(np.__version__)
+
 from scipy import sparse
 
 import pandas as pd
