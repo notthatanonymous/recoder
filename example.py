@@ -54,7 +54,7 @@ unique_uid = unique_uid[idx_perm]
 
 # create train/validation/test users
 n_users = unique_uid.size
-n_heldout_users = 10000
+n_heldout_users = 100
 
 tr_users = unique_uid[:(n_users - n_heldout_users * 2)]
 vd_users = unique_uid[(n_users - n_heldout_users * 2): (n_users - n_heldout_users)]
