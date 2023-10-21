@@ -67,7 +67,9 @@ profile2id = dict((pid, i) for (i, pid) in enumerate(unique_uid))
 
 pro_dir = os.path.join(DATA_DIR, 'pro_sg')
 
-print(pro_dir)
+
+if not os.path.exists(pro_dir):
+   os.makedirs(pro_dir)
 
 def split_train_test_proportion(data, test_prop=0.2):
     data_grouped_by_user = data.groupby('userId')
