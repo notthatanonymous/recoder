@@ -7,6 +7,16 @@ from scipy import sparse
 
 import pandas as pd
 
+import multiprocessing as mp
+
+import glog
+
+from recoder.model import Recoder
+from recoder.data import RecommendationDataset
+from recoder.metrics import AveragePrecision, Recall, NDCG
+from recoder.nn import DynamicAutoencoder, MatrixFactorization
+from recoder.utils import dataframe_to_csr_matrix
+
 ### change `DATA_DIR` to the location where movielens-20m dataset sits
 DATA_DIR = 'data/ml-20m/'
 
@@ -123,7 +133,72 @@ vad_data_te = numerize(vad_plays_te)
 vad_data_te.to_csv(os.path.join(pro_dir, 'validation_te.csv'), index=False)
 
 test_data_tr = numerize(test_plays_tr)
+
 test_data_tr.to_csv(os.path.join(pro_dir, 'test_tr.csv'), index=False)
 
 test_data_te = numerize(test_plays_te)
 test_data_te.to_csv(os.path.join(pro_dir, 'test_te.csv'), index=False)
+
+#Training
+
+
+data_dir = pro_dir
+model_dir = 'models/ml-20m/'
+
+if not os.path.exists(model_dir):
+   os.makedirs(model_dir)
+
+
+common_params = {
+  'user_col': 'uid',
+  'item_col': 'sid',
+  'inter_col': 'watched',
+}
+
+glog.info('Loading Data...')
+
+train_df = pd.read_csv(data_dir + 'train.csv')
+val_tr_df = pd.read_csv(data_dir + 'validation_tr.csv')
+val_te_df = pd.read_csv(data_dir + 'validation_te.csv')
+
+# uncomment it to train with MatrixFactorization
+# train_df = train_df.append(val_tr_df)
+
+train_matrix, item_id_map, _ = dataframe_to_csr_matrix(train_df, **common_params)
+val_tr_matrix, _, user_id_map = dataframe_to_csr_matrix(val_tr_df, item_id_map=item_id_map,
+                                                        **common_params)
+val_te_matrix, _, _ = dataframe_to_csr_matrix(val_te_df, item_id_map=item_id_map,
+                                              user_id_map=user_id_map, **common_params)
+
+train_dataset = RecommendationDataset(train_matrix)
+val_tr_dataset = RecommendationDataset(val_tr_matrix, val_te_matrix)
+
+
+use_cuda = True
+
+model = DynamicAutoencoder(hidden_layers=[200], activation_type='tanh',
+                           noise_prob=0.5, sparse=False)
+
+# model = MatrixFactorization(embedding_size=200, activation_type='tanh',
+#                             dropout_prob=0.5, sparse=False)
+
+trainer = Recoder(model=model, use_cuda=use_cuda, optimizer_type='adam',
+                  loss='logistic', user_based=False)
+
+# trainer.init_from_model_file(model_dir + 'bce_ns_d_0.0_n_0.5_200_epoch_50.model')
+model_checkpoint = model_dir + 'bce_ns_d_0.0_n_0.5_200'
+
+metrics = [Recall(k=20, normalize=True), Recall(k=50, normalize=True),
+           NDCG(k=100)]
+
+try:
+  trainer.train(train_dataset=train_dataset, val_dataset=val_tr_dataset,
+                batch_size=500, lr=1e-3, weight_decay=2e-5,
+                num_epochs=100, negative_sampling=True,
+                lr_milestones=[60, 80], num_data_workers=mp.cpu_count() if use_cuda else 0,
+                model_checkpoint_prefix=model_checkpoint,
+                checkpoint_freq=10, eval_num_recommendations=100,
+                metrics=metrics, eval_freq=10)
+except (KeyboardInterrupt, SystemExit):
+  trainer.save_state(model_checkpoint)
+  raise
