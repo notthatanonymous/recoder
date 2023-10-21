@@ -142,7 +142,7 @@ test_data_te.to_csv(os.path.join(pro_dir, 'test_te.csv'), index=False)
 #Training
 
 
-data_dir = pro_dir
+data_dir = pro_dir + "/"
 model_dir = 'models/ml-20m/'
 
 if not os.path.exists(model_dir):
