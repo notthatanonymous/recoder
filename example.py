@@ -26,7 +26,6 @@ def filter_triplets(tp, min_uc=5, min_sc=0):
     if min_sc > 0:
         itemcount = get_count(tp, 'movieId')
         tp = tp[tp['movieId'].isin(itemcount[itemcount['size'] >= min_sc]['movieId'].tolist())]
-        print(itemcount, tp)
     
     # Only keep the triplets for users who clicked on at least min_uc items
     # After doing this, some of the items will have less than min_uc users, but should only be a small proportion
@@ -87,7 +86,7 @@ def split_train_test_proportion(data, test_prop=0.2):
         else:
             tr_list.append(group)
 
-        if i % 1000 == 0:
+        if i % 10 == 0:
             print("%d users sampled" % i)
             sys.stdout.flush()
 
