@@ -260,4 +260,4 @@ metrics_accumulated = evaluator.evaluate(val_tr_dataset, batch_size=500)
 # for metric in metrics_accumulated:
 #   print(f'{metric}: {np.mean(metrics_accumulated[metric])}')
 
-print(f"Score: {np.mean(metrics_accumulated[2]}")
+print(f"Score: {np.mean(metrics_accumulated[2])}")
