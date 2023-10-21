@@ -25,42 +25,41 @@ jobs:
       os: linux
       dist: xenial
       arch: amd64
-    # - name: "Python 3.7 on Xenial linux"
-    #   python: 3.7
-    #   os: linux
-    #   dist: xenial
-    #   arch: amd64
-    # - name: "Python 3.7 on Bionic linux"
-    #   python: 3.7
-    #   os: linux
-    #   dist: bionic
-    #   arch: amd64
-    # - name: "Python 3.7 on Focal linux"
-    #   python: 3.7
-    #   os: linux
-    #   dist: focal
-    #   arch: amd64
+    - name: "Python 3.7 on Xenial linux"
+      python: 3.7
+      os: linux
+      dist: xenial
+      arch: amd64
+    - name: "Python 3.7 on Bionic linux"
+      python: 3.7
+      os: linux
+      dist: bionic
+      arch: amd64
+    - name: "Python 3.7 on Focal linux"
+      python: 3.7
+      os: linux
+      dist: focal
+      arch: amd64
     - name: "Python 3.7 on Xenial linux on arm64"
       python: 3.7
       os: linux
       dist: xenial
       arch: arm64
-    # - name: "Python 3.7 on macOS"
-    #   os: osx
-    #   osx_image: xcode11.5  # Python 3.7 running on macOS 10.14.4
-    #   language: shell       # 'language: python' is an error on Travis CI macOS
-    # - name: "Python 3.7 on Windows"
-    #   os: windows           # Windows 10.0.17134 N/A Build 17134
-    #   language: shell       # 'language: python' is an error on Travis CI Windows
-    #   before_install:
-    #     - choco install python --version 3.7.5
-    #     - python -m pip install --upgrade pip
-    #   env: PATH=/c/Python37:/c/Python37/Scripts:$PATH # command to install dependencies
+    - name: "Python 3.7 on macOS"
+      os: osx
+      osx_image: xcode11.5  # Python 3.7 running on macOS 10.14.4
+      language: shell       # 'language: python' is an error on Travis CI macOS
+    - name: "Python 3.7 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell       # 'language: python' is an error on Travis CI Windows
+      before_install:
+        - choco install python --version 3.7.5
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH # command to install dependencies
 install:
   - pip3 install --upgrade pip
   - pip3 install -r requirements.txt
   - pip3 install --upgrade setuptools wheel
-  - pip3 install numpy --upgrade
   - pip3 install .
 script:
   - travis_wait 80 python3 example.py || travis_wait 80 python example.py
