@@ -4,9 +4,6 @@ import sys
 
 import numpy as np
 
-
-print(np.__version__)
-
 from scipy import sparse
 
 import pandas as pd
@@ -262,3 +259,5 @@ metrics_accumulated = evaluator.evaluate(val_tr_dataset, batch_size=500)
 
 for metric in metrics_accumulated:
   print(f'{metric}: {np.mean(metrics_accumulated[metric])}')
+
+print(f"\n\n\nScore: {np.mean(metrics_accumulated[2]}\n\n\n")
